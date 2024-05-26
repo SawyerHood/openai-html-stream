@@ -4,7 +4,7 @@
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
   "description": "Transform a streaming LLM response into HTML",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "repository": "github:sawyerhood/openai-html-stream",
   "tags": [
     "openai",
