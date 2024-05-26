@@ -16,9 +16,6 @@ export function streamHtml(
         let startedSending = false;
         let sentIndex = 0;
 
-        // Start writing the html
-        controller.enqueue(`<!DOCTYPE html><html>`);
-
         for await (const chunk of stream) {
           const value = chunk.choices[0]?.delta?.content || "";
 
@@ -54,11 +51,15 @@ export function streamHtml(
                 : newContent;
 
               programResult = `<!DOCTYPE html><html>` + newContent;
-              controller.enqueue(newContent);
+              controller.enqueue(programResult);
               sentIndex = programResult.length;
               startedSending = true;
             }
           }
+        }
+
+        if (!startedSending) {
+          controller.enqueue("<!DOCTYPE html><html>");
         }
 
         if (!programResult.includes("</html>")) {
