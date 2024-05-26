@@ -1,11 +1,17 @@
-import type { ChatCompletionChunk } from "openai/resources/index.mjs";
-
 type Options = {
   injectIntoHead?: string;
 };
 
+export type Chunk = {
+  choices: {
+    delta: {
+      content?: string | null;
+    };
+  }[];
+};
+
 export function streamHtml(
-  stream: AsyncIterable<ChatCompletionChunk>,
+  stream: AsyncIterable<Chunk>,
   { injectIntoHead }: Options = {}
 ): ReadableStream<Uint8Array> {
   return new ReadableStream<string>({

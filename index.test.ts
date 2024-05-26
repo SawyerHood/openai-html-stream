@@ -1,29 +1,21 @@
-import { streamHtml } from "./index.ts";
-import type { ChatCompletionChunk } from "openai/resources/index.mjs";
-import { expect, test, it, describe } from "@jest/globals";
+import { streamHtml, Chunk } from "./index.ts";
+import { expect, it, describe } from "@jest/globals";
 
-function createChunkFromString(str: string): ChatCompletionChunk {
+function createChunkFromString(str: string): Chunk {
   return {
-    id: "",
     choices: [
       {
-        finish_reason: "stop",
-        index: 0,
         delta: {
           content: str,
         },
       },
     ],
-    created: 0,
-    model: "",
-    object: "chat.completion.chunk",
-    system_fingerprint: "",
   };
 }
 
 function chunkStringIntoAsyncIterable(
   ...strings: string[]
-): AsyncIterable<ChatCompletionChunk> {
+): AsyncIterable<Chunk> {
   return (async function* () {
     for (const str of strings) {
       yield createChunkFromString(str);
@@ -52,7 +44,7 @@ function chunkStringIntoArray(str: string, chunkSize: number): string[] {
 
 function evalDifferentSizes(
   input: string,
-  cb: (stream: AsyncIterable<ChatCompletionChunk>) => any
+  cb: (stream: AsyncIterable<Chunk>) => any
 ) {
   it("works for a single chunk", async () => {
     const stream = chunkStringIntoAsyncIterable(input);
